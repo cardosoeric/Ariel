@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#edf2ef">
+    <meta name="description" content="Organize suas atividades, acompanhe prazos e veja seu progresso.">
+    <title>Meu ritmo — Organizador de atividades</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <video
+      class="wallpaper-video"
+      id="wallpaper-video"
+      aria-hidden="true"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      hidden
+    ></video>
+    <main class="app-shell">
+      <header class="page-header">
+        <a class="brand" href="#" aria-label="Meu ritmo, início">
+          <span class="brand-mark" aria-hidden="true">m.</span>
+          <span>meu ritmo</span>
+        </a>
+        <div class="header-actions">
+          <p class="header-note">Um passo de cada vez.</p>
+          <details class="appearance-menu" id="appearance-menu">
+            <summary class="appearance-toggle" aria-label="Abrir personalização visual" title="Personalização visual">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 7h9m4 0h3M4 17h3m4 0h9"></path>
+                <circle cx="15" cy="7" r="2"></circle>
+                <circle cx="9" cy="17" r="2"></circle>
+              </svg>
+              <span class="visually-hidden">Personalização visual</span>
+            </summary>
+            <div class="appearance-panel">
+              <p class="eyebrow">SUA APARÊNCIA</p>
+              <label class="control-label" for="glass-opacity">Transparência do liquid glass</label>
+              <div class="opacity-control">
+                <span aria-hidden="true">◐</span>
+                <input id="glass-opacity" type="range" min="45" max="95" step="1" value="90">
+                <output id="glass-opacity-value" for="glass-opacity">90%</output>
+              </div>
+              <label class="control-label" for="background-upload">Imagem ou vídeo de fundo</label>
+              <label class="upload-button" for="background-upload">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v5h14v-5"></path>
+                </svg>
+                Escolher arquivo
+              </label>
+              <input class="visually-hidden" id="background-upload" type="file" accept="image/*,video/*">
+              <p class="upload-hint">Imagens ou vídeos de até 50 MB</p>
+              <button class="clear-background" id="clear-background" type="button" hidden>Remover fundo</button>
+              <p class="appearance-status" id="appearance-status" role="status" aria-live="polite"></p>
+            </div>
+          </details>
+          <button
+            class="theme-toggle"
+            id="theme-toggle"
+            type="button"
+            aria-label="Ativar tema escuro"
+            aria-pressed="false"
+            title="Ativar tema escuro"
+          >
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="3.5"></circle>
+              <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+            </svg>
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8 8.5 8.5 0 1 0 20.2 15.4Z"></path>
+              <path d="m16.5 3 .45 1.35L18.3 5l-1.35.45L16.5 6.8l-.45-1.35L14.7 5l1.35-.65L16.5 3Z"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="welcome" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">SEU ESPAÇO DE ORGANIZAÇÃO</p>
+          <h1 id="page-title">Dê forma aos seus planos.</h1>
+          <p class="welcome-copy">Organize suas atividades e acompanhe cada conquista no seu tempo.</p>
+        </div>
+        <div class="date-chip">
+          <span class="date-dot" aria-hidden="true"></span>
+          <span id="today-label"></span>
+        </div>
+      </section>
+
+      <section class="progress-card" aria-labelledby="progress-title">
+        <div class="progress-copy">
+          <div>
+            <p class="eyebrow">SEU PROGRESSO</p>
+            <h2 id="progress-title">Tudo começa com um primeiro passo</h2>
+          </div>
+          <p class="progress-count"><strong id="completed-count">0</strong><span>de <span id="total-count">0</span> concluídas</span></p>
+        </div>
+        <div
+          class="progress-track"
+          id="progress-track"
+          role="progressbar"
+          aria-label="Progresso das atividades concluídas"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <span class="progress-fill" id="progress-fill"></span>
+        </div>
+        <p class="progress-message" id="progress-message" aria-live="polite">Adicione sua primeira atividade para começar.</p>
+      </section>
+
+      <div class="content-grid">
+        <section class="form-card" aria-labelledby="form-title">
+          <div class="section-heading">
+            <div class="section-icon" aria-hidden="true">＋</div>
+            <div>
+              <p class="eyebrow">VAMOS ORGANIZAR</p>
+              <h2 id="form-title">Nova atividade</h2>
+            </div>
+          </div>
+
+          <form id="activity-form">
+            <label class="field-label" for="activity-name">Nome da atividade</label>
+            <input
+              id="activity-name"
+              name="name"
+              type="text"
+              maxlength="100"
+              placeholder="Ex.: Preparar apresentação"
+              autocomplete="off"
+              required
+            >
+
+            <div class="field-row">
+              <div class="field-group">
+                <label class="field-label" for="activity-date">Data de entrega</label>
+                <input id="activity-date" name="dueDate" type="date" required>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="activity-category">Categoria</label>
+                <select id="activity-category" name="category" required>
+                  <option value="Estudos">Estudos</option>
+                  <option value="Trabalho">Trabalho</option>
+                  <option value="Pessoal">Pessoal</option>
+                  <option value="Saúde">Saúde</option>
+                </select>
+              </div>
+            </div>
+
+            <label class="field-label" for="activity-priority">Prioridade</label>
+            <select id="activity-priority" name="priority" required>
+              <option value="Baixa">Baixa</option>
+              <option value="Média" selected>Média</option>
+              <option value="Alta">Alta</option>
+            </select>
+
+            <button class="submit-button" type="submit">
+              <span aria-hidden="true">＋</span>
+              Adicionar atividade
+            </button>
+            <p class="form-feedback" id="form-feedback" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="activities-section" aria-labelledby="activities-title">
+          <div class="activities-heading">
+            <div>
+              <p class="eyebrow">SEU DIA, DO SEU JEITO</p>
+              <h2 id="activities-title">Minhas atividades <span class="task-total" id="visible-count">0</span></h2>
+            </div>
+            <div class="filter-control">
+              <label class="visually-hidden" for="category-filter">Filtrar por categoria</label>
+              <select id="category-filter" aria-label="Filtrar atividades por categoria">
+                <option value="Todas">Todas as categorias</option>
+                <option value="Estudos">Estudos</option>
+                <option value="Trabalho">Trabalho</option>
+                <option value="Pessoal">Pessoal</option>
+                <option value="Saúde">Saúde</option>
+              </select>
+            </div>
+          </div>
+          <div class="activity-list" id="activity-list" aria-live="polite"></div>
+        </section>
+      </div>
+
+      <footer class="page-footer">Feito para você encontrar seu próprio ritmo <span aria-hidden="true">✳</span></footer>
+    </main>
+  </body>
+</html>
